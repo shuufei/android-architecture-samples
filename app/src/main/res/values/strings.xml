@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ComposeSampleApplication20230220</string>
+    <string name="add_task">New Task</string>
+
+    <string name="label_all">All Tasks</string>
+    <string name="no_tasks_all">You have no tasks!</string>
+
+    <string name="no_tasks_image_content_description">No tasks image</string>
+</resources>
