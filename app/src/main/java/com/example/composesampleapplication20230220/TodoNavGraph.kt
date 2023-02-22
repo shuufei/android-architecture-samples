@@ -1,8 +1,12 @@
 package com.example.composesampleapplication20230220
 
+import androidx.compose.material.DrawerState
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,12 +18,16 @@ import com.example.composesampleapplication20230220.TodoDestinationsArgs.TASK_ID
 import com.example.composesampleapplication20230220.TodoDestinationsArgs.TITLE_ARG
 import com.example.composesampleapplication20230220.TodoDestinationsArgs.USER_MESSAGE_ARG
 import com.example.composesampleapplication20230220.tasks.TasksScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun TodoNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     startDestination: String = TodoDestinations.TASKS_ROUTE,
     navActions: TodoNavigationActions = remember(navController) {
         TodoNavigationActions(navController)
@@ -41,7 +49,10 @@ fun TodoNavGraph(
                 onTaskClick = {task ->
                     println("clicked task ${task.title}")
                 },
-                onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) }
+                onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
+                openDrawer = { coroutineScope.launch {
+                    drawerState.open()
+                } }
             )
         }
 

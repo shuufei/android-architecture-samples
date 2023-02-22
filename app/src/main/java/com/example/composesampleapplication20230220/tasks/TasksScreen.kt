@@ -26,17 +26,29 @@ import com.example.composesampleapplication20230220.data.Task
 import com.example.composesampleapplication20230220.ui.theme.ComposeSampleApplication20230220Theme
 import com.example.composesampleapplication20230220.util.LoadingContent
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composesampleapplication20230220.util.TasksTopAppBar
 
 @Composable
 fun TasksScreen(
     @StringRes userMessage: Int,
     onTaskClick: (Task) -> Unit,
     onAddTask: () -> Unit,
+    openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TasksViewModel = viewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
     Scaffold(
+        topBar = {
+                 TasksTopAppBar(
+                     openDrawer = openDrawer,
+                     onFilterAllTasks = { /*TODO*/ },
+                     onFilterActiveTasks = { /*TODO*/ },
+                     onFilterCompletedTasks = { /*TODO*/ },
+                     onClearCompletedTasks = { /*TODO*/ },
+                     onRefresh = { /*TODO*/ }
+                 )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddTask) {
                 Icon(Icons.Filled.Add, stringResource(id = R.string.add_task))
