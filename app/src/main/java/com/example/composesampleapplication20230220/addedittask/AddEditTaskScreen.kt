@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composesampleapplication20230220.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -26,7 +27,7 @@ fun AddEditTaskScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    viewModel: AddEditTaskViewModel = viewModel()
+    viewModel: AddEditTaskViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

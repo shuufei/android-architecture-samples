@@ -27,7 +27,9 @@ import com.example.composesampleapplication20230220.ui.theme.ComposeSampleApplic
 import com.example.composesampleapplication20230220.util.LoadingContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composesampleapplication20230220.util.TasksTopAppBar
+import androidx.hilt.navigation.compose.hiltViewModel
 
+//@OptIn(Experimental)
 @Composable
 fun TasksScreen(
     @StringRes userMessage: Int,
@@ -35,7 +37,7 @@ fun TasksScreen(
     onAddTask: () -> Unit,
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TasksViewModel = viewModel(),
+    viewModel: TasksViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
 
@@ -59,12 +61,12 @@ fun TasksScreen(
     ) {paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
 
-        val tasks by viewModel.tasks.collectAsState(initial = emptyList())
+//        val tasks by viewModel.tasks.collectAsState(initial = emptyList())
 
         TasksContent(
             loading = uiState.isLoading,
-//            tasks = uiState.items,
-            tasks = tasks,
+            tasks = uiState.items,
+//            tasks = tasks,
             currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
             noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
             noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,

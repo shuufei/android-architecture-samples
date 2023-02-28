@@ -63,7 +63,7 @@ fun TodoNavGraph(
                 openDrawer = { coroutineScope.launch {
                     drawerState.open()
                 } },
-                viewModel = TasksViewModel(db)
+//                viewModel = TasksViewModel(db)
             )
         }
 
@@ -82,7 +82,7 @@ fun TodoNavGraph(
                         if (taskId == null) ADD_EDIT_RESULT_OK else EDIT_RESULT_OK
                     ) },
                 onBack = { navController.popBackStack() },
-                viewModel = AddEditTaskViewModel(db)
+//                viewModel = AddEditTaskViewModel(db)
             )
         }
     }
