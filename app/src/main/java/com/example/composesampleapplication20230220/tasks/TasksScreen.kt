@@ -38,6 +38,7 @@ fun TasksScreen(
     viewModel: TasksViewModel = viewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
+
     Scaffold(
         topBar = {
                  TasksTopAppBar(
@@ -58,9 +59,12 @@ fun TasksScreen(
     ) {paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
 
+        val tasks by viewModel.tasks.collectAsState(initial = emptyList())
+
         TasksContent(
             loading = uiState.isLoading,
-            tasks = uiState.items,
+//            tasks = uiState.items,
+            tasks = tasks,
             currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
             noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
             noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,

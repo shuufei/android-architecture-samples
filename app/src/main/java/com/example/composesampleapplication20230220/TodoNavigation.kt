@@ -35,7 +35,7 @@ class TodoNavigationActions(private val navController: NavHostController) {
         val navigationFromDrawer = userMessage == 0
         navController.navigate(
             TASKS_SCREEN.let {
-                if (userMessage != 0) "$it$USER_MESSAGE_ARG=$userMessage" else it
+                if (userMessage != 0) "$it?$USER_MESSAGE_ARG=$userMessage" else it
             }
         )
     }

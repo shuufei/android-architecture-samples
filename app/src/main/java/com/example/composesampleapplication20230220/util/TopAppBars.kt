@@ -1,5 +1,6 @@
 package com.example.composesampleapplication20230220.util
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -113,6 +115,21 @@ private fun TopAppBarDropdownMenu(
     }
 }
 
+@Composable
+fun AddEditTaskInputAppBar(
+    @StringRes title: Int,
+    onBack: () -> Unit
+) {
+    TopAppBar(
+        title = { Text(text = stringResource(title)) },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Filled.ArrowBack, stringResource(id = R.string.menu_back))
+            }
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
 
 @Preview
 @Composable
