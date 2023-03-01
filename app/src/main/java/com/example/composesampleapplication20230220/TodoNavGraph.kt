@@ -39,10 +39,6 @@ fun TodoNavGraph(
         TodoNavigationActions(navController)
     }
 ) {
-    val db = Room.databaseBuilder(
-        TodoApplication.getInstance(),
-        ToDoDatabase::class.java, "Tasks.db"
-    ).build()
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -60,10 +56,10 @@ fun TodoNavGraph(
                     println("clicked task ${task.title}")
                 },
                 onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
+                onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
                 openDrawer = { coroutineScope.launch {
                     drawerState.open()
                 } },
-//                viewModel = TasksViewModel(db)
             )
         }
 
@@ -82,7 +78,6 @@ fun TodoNavGraph(
                         if (taskId == null) ADD_EDIT_RESULT_OK else EDIT_RESULT_OK
                     ) },
                 onBack = { navController.popBackStack() },
-//                viewModel = AddEditTaskViewModel(db)
             )
         }
     }

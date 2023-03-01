@@ -34,6 +34,12 @@ class AddEditTaskViewModel @Inject constructor(
         createNewTask()
     }
 
+    fun snackbarMessageShown() {
+        _uiState.update {
+            it.copy(userMessage = null)
+        }
+    }
+
     fun updateTitle(newTitle: String) {
         _uiState.update {
             it.copy(title = newTitle)

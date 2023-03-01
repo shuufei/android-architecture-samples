@@ -5,6 +5,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
+import com.example.composesampleapplication20230220.ADD_EDIT_RESULT_OK
+import com.example.composesampleapplication20230220.DELETE_RESULT_OK
+import com.example.composesampleapplication20230220.EDIT_RESULT_OK
 import com.example.composesampleapplication20230220.R
 import com.example.composesampleapplication20230220.data.Task
 import com.example.composesampleapplication20230220.data.source.TasksRepository
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import com.example.composesampleapplication20230220.data.Result
 import com.example.composesampleapplication20230220.util.WhileUiSubscribed
+import kotlinx.coroutines.launch
 
 data class TasksUiState(
     val items: List<Task> = listOf(Task(
@@ -32,13 +36,8 @@ class TasksViewModel @Inject constructor(
     private val db: ToDoDatabase
 ) : ViewModel() {
 
-//    val db = Room.databaseBuilder(
-//        applicationContext,
-//        ToDoDatabase::class.java, "Tasks.db"
-//    ).build()
-
-    private val _uiState = MutableStateFlow((TasksUiState()))
-//    val uiState: StateFlow<TasksUiState> = _uiState.asStateFlow()
+    private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     private val _filteredTasksAsync = combine(tasksRepository.getTasksStream()) { (tasks) ->
         filterTasks(tasks)
@@ -47,15 +46,17 @@ class TasksViewModel @Inject constructor(
         .onStart<Async<List<Task>>> { emit(Async.Loading) }
 
     val uiState: StateFlow<TasksUiState> = combine(
-        _filteredTasksAsync
-    ) { (tasksAsync) ->
+        _isLoading, _userMessage, _filteredTasksAsync
+    ) { isLoading, userMessage,tasksAsync ->
         when (tasksAsync) {
             Async.Loading -> {
                 TasksUiState(isLoading = true)
             }
             is Async.Success -> {
                 TasksUiState(
-                    items = tasksAsync.data
+                    items = tasksAsync.data,
+                    isLoading = isLoading,
+                    userMessage = userMessage
                 )
             }
         }
@@ -66,8 +67,30 @@ class TasksViewModel @Inject constructor(
             initialValue = TasksUiState(isLoading = true)
         )
 
-    fun completeTask(task: Task, completed: Boolean) {
-        // TODO: 実装
+    fun completeTask(task: Task, completed: Boolean) = viewModelScope.launch {
+        if (completed) {
+            tasksRepository.completeTask(task)
+            showSnackbarMessage(R.string.task_marked_complete)
+        } else {
+            tasksRepository.activateTask(task)
+            showSnackbarMessage(R.string.task_marked_active)
+        }
+    }
+
+    fun showEditResultMessage(result: Int) {
+        when (result) {
+            EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_saved_task_message)
+            ADD_EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_added_task_message)
+            DELETE_RESULT_OK -> showSnackbarMessage(R.string.successfully_deleted_task_message)
+        }
+    }
+
+    fun snackbarMessageShown() {
+        _userMessage.value = null
+    }
+
+    fun showSnackbarMessage(message: Int) {
+        _userMessage.value = message
     }
 
     fun refresh() {

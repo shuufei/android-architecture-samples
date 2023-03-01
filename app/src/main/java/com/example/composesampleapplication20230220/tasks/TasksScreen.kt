@@ -10,9 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -35,6 +33,7 @@ fun TasksScreen(
     @StringRes userMessage: Int,
     onTaskClick: (Task) -> Unit,
     onAddTask: () -> Unit,
+    onUserMessageDisplayed: () -> Unit,
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TasksViewModel = hiltViewModel(),
@@ -42,6 +41,7 @@ fun TasksScreen(
 ) {
 
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
                  TasksTopAppBar(
                      openDrawer = openDrawer,
@@ -61,12 +61,9 @@ fun TasksScreen(
     ) {paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
 
-//        val tasks by viewModel.tasks.collectAsState(initial = emptyList())
-
         TasksContent(
             loading = uiState.isLoading,
             tasks = uiState.items,
-//            tasks = tasks,
             currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
             noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
             noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,
@@ -75,6 +72,22 @@ fun TasksScreen(
             onTaskCheckedChange = viewModel::completeTask,
             modifier = Modifier.padding(paddingValues)
         )
+
+        uiState.userMessage?.let { message ->
+            val snackbarText = stringResource(message)
+            LaunchedEffect(scaffoldState, viewModel, message, snackbarText) {
+                scaffoldState.snackbarHostState.showSnackbar(snackbarText)
+                viewModel.snackbarMessageShown()
+            }
+        }
+
+        val currentOnUserMessageDisplayed by rememberUpdatedState(onUserMessageDisplayed)
+        LaunchedEffect(userMessage) {
+            if (userMessage != 0) {
+                viewModel.showEditResultMessage(userMessage)
+                currentOnUserMessageDisplayed()
+            }
+        }
     }
 }
 
