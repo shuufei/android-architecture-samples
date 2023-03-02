@@ -67,6 +67,14 @@ class TasksViewModel @Inject constructor(
             initialValue = TasksUiState(isLoading = true)
         )
 
+    fun  clearCompletedTasks() {
+        viewModelScope.launch {
+            tasksRepository.clearCompletedTasks()
+            showEditResultMessage(R.string.completed_tasks_cleared)
+            refresh()
+        }
+    }
+
     fun completeTask(task: Task, completed: Boolean) = viewModelScope.launch {
         if (completed) {
             tasksRepository.completeTask(task)

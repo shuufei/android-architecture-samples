@@ -116,6 +116,29 @@ private fun TopAppBarDropdownMenu(
 }
 
 @Composable
+fun TaskDetailTopAppBar(
+    onBack: () -> Unit,
+    onDelete: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(text = stringResource(id = R.string.task_details))
+        },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Filled.ArrowBack, stringResource(id = R.string.menu_back))
+            }
+        },
+        actions = {
+            IconButton(onClick = onDelete) {
+                Icon(Icons.Filled.Delete, stringResource(id = R.string.menu_delete_task))
+            }
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
 fun AddEditTaskInputAppBar(
     @StringRes title: Int,
     onBack: () -> Unit

@@ -48,8 +48,8 @@ fun TasksScreen(
                      onFilterAllTasks = { /*TODO*/ },
                      onFilterActiveTasks = { /*TODO*/ },
                      onFilterCompletedTasks = { /*TODO*/ },
-                     onClearCompletedTasks = { /*TODO*/ },
-                     onRefresh = { /*TODO*/ }
+                     onClearCompletedTasks = { viewModel.clearCompletedTasks() },
+                     onRefresh = { viewModel.refresh() }
                  )
         },
         floatingActionButton = {

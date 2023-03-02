@@ -22,6 +22,7 @@ import com.example.composesampleapplication20230220.TodoDestinationsArgs.USER_ME
 import com.example.composesampleapplication20230220.addedittask.AddEditTaskScreen
 import com.example.composesampleapplication20230220.addedittask.AddEditTaskViewModel
 import com.example.composesampleapplication20230220.data.source.local.ToDoDatabase
+import com.example.composesampleapplication20230220.taskdetail.TaskDetailScreen
 import com.example.composesampleapplication20230220.tasks.TasksScreen
 import com.example.composesampleapplication20230220.tasks.TasksViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +54,7 @@ fun TodoNavGraph(
             TasksScreen(
                 userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
                 onTaskClick = {task ->
-                    println("clicked task ${task.title}")
+                    navActions.navigateToTaskDetail(task.id)
                 },
                 onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
                 onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
@@ -78,6 +79,16 @@ fun TodoNavGraph(
                         if (taskId == null) ADD_EDIT_RESULT_OK else EDIT_RESULT_OK
                     ) },
                 onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(TodoDestinations.TASK_DETAIL_ROUTE) {
+            TaskDetailScreen(
+                onEditTask = { taskId ->
+                    navActions.navigateToAddEditTask(R.string.edit_task, taskId)
+                },
+                onBack = { navController.popBackStack() },
+                onDeleteTask = { navActions.navigateToTasks(DELETE_RESULT_OK) }
             )
         }
     }

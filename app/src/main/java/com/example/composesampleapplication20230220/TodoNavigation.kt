@@ -48,5 +48,9 @@ class TodoNavigationActions(private val navController: NavHostController) {
             }
         )
     }
+
+    fun navigateToTaskDetail(taskId: String) {
+        navController.navigate("$TASK_DETAIL_SCREEN/$taskId")
+    }
 }
 
