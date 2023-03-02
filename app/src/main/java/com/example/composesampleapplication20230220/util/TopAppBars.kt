@@ -139,6 +139,22 @@ fun TaskDetailTopAppBar(
 }
 
 @Composable
+fun AddEditTaskTopAppBar(
+    @StringRes title: Int,
+    onBack: () -> Unit
+) {
+    TopAppBar(
+        title = { Text(text = stringResource(id = title)) },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Filled.ArrowBack, stringResource(id = R.string.menu_back))
+            }
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
 fun AddEditTaskInputAppBar(
     @StringRes title: Int,
     onBack: () -> Unit

@@ -19,6 +19,7 @@ import com.example.composesampleapplication20230220.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composesampleapplication20230220.util.AddEditTaskTopAppBar
 
 @Composable
 fun AddEditTaskScreen(
@@ -34,6 +35,7 @@ fun AddEditTaskScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
+        topBar = { AddEditTaskTopAppBar(title = topBarTitle, onBack) },
         floatingActionButton = {
             FloatingActionButton(onClick = viewModel::saveTask) {
                 Icon(Icons.Filled.Done, stringResource(id = R.string.cd_save_task))
