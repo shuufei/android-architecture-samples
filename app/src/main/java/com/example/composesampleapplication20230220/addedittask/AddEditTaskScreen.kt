@@ -2,6 +2,8 @@ package com.example.composesampleapplication20230220.addedittask
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -11,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -56,6 +59,14 @@ fun AddEditTaskScreen(
                 onTaskUpdate()
             }
         }
+
+        uiState.userMessage?.let { userMessage ->
+            val snackbarText = stringResource(id = userMessage)
+            LaunchedEffect(scaffoldState, viewModel, userMessage, snackbarText) {
+                scaffoldState.snackbarHostState.showSnackbar(snackbarText)
+                viewModel.snackbarMessageShown()
+            }
+        }
     }
 }
 
@@ -75,7 +86,12 @@ private fun AddEditTaskContent(
             content = { }
         )
     } else {
-        Column() {
+        Column(
+            modifier
+                .fillMaxWidth()
+                .padding(all = dimensionResource(id = R.dimen.horizontal_margin))
+                .verticalScroll(rememberScrollState())
+        ) {
             val textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
