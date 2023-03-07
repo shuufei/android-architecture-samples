@@ -3,6 +3,7 @@ package com.example.composesampleapplication20230220.taskdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composesampleapplication20230220.R
 import com.example.composesampleapplication20230220.TodoDestinations
 import com.example.composesampleapplication20230220.TodoDestinationsArgs
 import com.example.composesampleapplication20230220.data.Task
@@ -65,11 +66,26 @@ class TaskDetailViewModel @Inject constructor(
         _isTaskDeleted.value = true
     }
 
+    fun setCompleted(completed: Boolean) = viewModelScope.launch {
+        val task = uiState.value.task ?: return@launch
+        if (completed) {
+            tasksRepository.completeTask(task)
+            showSnackbarMessage(R.string.task_marked_complete)
+        } else {
+            tasksRepository.activateTask(task)
+            showSnackbarMessage(R.string.task_marked_active)
+        }
+    }
+
     private fun handleResult(tasksResult: Result<Task>): Async<Task?> {
         return if (tasksResult is Result.Success) {
             Async.Success(tasksResult.data)
         } else {
             Async.Success(null)
         }
+    }
+
+    private fun showSnackbarMessage(message: Int) {
+        _userMessage.value = message
     }
 }

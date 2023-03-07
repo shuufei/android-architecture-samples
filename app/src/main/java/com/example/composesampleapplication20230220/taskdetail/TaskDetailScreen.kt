@@ -48,7 +48,7 @@ fun TaskDetailScreen(
             loading = uiState.isLoading,
             empty = uiState.task == null && !uiState.isLoading,
             task = uiState.task,
-            onTaskCheck = { /*TODO*/ },
+            onTaskCheck = viewModel::setCompleted,
             onRefresh = { /*TODO*/ },
             modifier = Modifier.padding(paddingValues)
         )
