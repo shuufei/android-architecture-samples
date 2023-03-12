@@ -2,8 +2,11 @@ package com.example.composesampleapplication20230220.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+
+val primaryDarkColor: Color = Color(0xFF263238)
 
 @Composable
 fun LoadingContent(

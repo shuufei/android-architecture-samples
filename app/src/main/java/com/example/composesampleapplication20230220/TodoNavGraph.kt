@@ -6,6 +6,7 @@ import androidx.compose.material.DrawerValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -13,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.Room
@@ -25,9 +27,9 @@ import com.example.composesampleapplication20230220.data.source.local.ToDoDataba
 import com.example.composesampleapplication20230220.taskdetail.TaskDetailScreen
 import com.example.composesampleapplication20230220.tasks.TasksScreen
 import com.example.composesampleapplication20230220.tasks.TasksViewModel
+import com.example.composesampleapplication20230220.util.AppModalDrawer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun TodoNavGraph(
@@ -40,6 +42,9 @@ fun TodoNavGraph(
         TodoNavigationActions(navController)
     }
 ) {
+    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentNavBackStackEntry?.destination?.route ?: startDestination
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -51,17 +56,23 @@ fun TodoNavGraph(
                 navArgument(USER_MESSAGE_ARG) { type = NavType.IntType; defaultValue = 0 }
             )
         ) { entry ->
-            TasksScreen(
-                userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
-                onTaskClick = {task ->
-                    navActions.navigateToTaskDetail(task.id)
-                },
-                onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
-                onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
-                openDrawer = { coroutineScope.launch {
-                    drawerState.open()
-                } },
-            )
+            AppModalDrawer(
+                drawerState = drawerState,
+                currentRoute = currentRoute,
+                navigationActions = navActions
+            ) {
+                TasksScreen(
+                    userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
+                    onTaskClick = {task ->
+                        navActions.navigateToTaskDetail(task.id)
+                    },
+                    onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
+                    onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
+                    openDrawer = { coroutineScope.launch {
+                        drawerState.open()
+                    } },
+                )
+            }
         }
 
         composable(
