@@ -15,6 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesampleapplication20230220.R
 import com.example.composesampleapplication20230220.data.Task
 import com.example.composesampleapplication20230220.ui.theme.ComposeSampleApplication20230220Theme
@@ -43,7 +44,7 @@ fun TaskDetailScreen(
         }
     ) { paddingValues ->
 //        TODO: 実際のコードはcollectAsStateWithLifecycleを利用
-        val uiState by viewModel.uiState.collectAsState()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
         EditTaskContent(
             loading = uiState.isLoading,

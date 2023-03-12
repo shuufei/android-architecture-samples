@@ -26,8 +26,8 @@ import com.example.composesampleapplication20230220.util.LoadingContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composesampleapplication20230220.util.TasksTopAppBar
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-//@OptIn(Experimental)
 @Composable
 fun TasksScreen(
     @StringRes userMessage: Int,
@@ -59,7 +59,7 @@ fun TasksScreen(
         },
         modifier = modifier.fillMaxSize()
     ) {paddingValues ->
-        val uiState by viewModel.uiState.collectAsState()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
         TasksContent(
             loading = uiState.isLoading,
