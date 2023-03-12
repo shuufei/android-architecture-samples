@@ -77,6 +77,10 @@ class TaskDetailViewModel @Inject constructor(
         }
     }
 
+    fun snackbarMessageShown() {
+        _userMessage.value = null
+    }
+
     private fun handleResult(tasksResult: Result<Task>): Async<Task?> {
         return if (tasksResult is Result.Success) {
             Async.Success(tasksResult.data)

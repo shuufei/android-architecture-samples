@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -52,6 +53,20 @@ fun TaskDetailScreen(
             onRefresh = { /*TODO*/ },
             modifier = Modifier.padding(paddingValues)
         )
+
+        uiState.userMessage?.let { userMessage ->
+            val snackbarText = stringResource(id = userMessage)
+            LaunchedEffect(snackbarText, scaffoldState, viewModel, userMessage) {
+                scaffoldState.snackbarHostState.showSnackbar(snackbarText)
+                viewModel.snackbarMessageShown()
+            }
+        }
+
+        LaunchedEffect(uiState.isTaskDeleted) {
+            if (uiState.isTaskDeleted) {
+                onDeleteTask()
+            }
+        }
     }
 }
 
